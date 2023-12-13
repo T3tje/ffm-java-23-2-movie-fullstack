@@ -5,6 +5,8 @@ import de.neuefische.backend.model.MovieDBResponse;
 import de.neuefische.backend.model.MovieDTO;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -18,7 +20,8 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MovieRepository {
-
+    @Value("${RAPID_API_KEY}")
+    private String apiKey;
     private Map<String, Movie> mapOfMovies = new HashMap<>();
 
     public List<MovieDTO> getAllMovies(){
@@ -27,7 +30,7 @@ public class MovieRepository {
                         .get()//Schickt eine GET-Anfrage...
                         .uri("https://moviesdatabase.p.rapidapi.com/titles")//... an diese Adresse...
                         .header("X-RapidAPI-Key", //... mit diesem Header Key-Value Pair
-                                "33abc06cebmsh3cc718a4f2182e2p1e0135jsnf4ee4a01a69d")
+                                apiKey)
                         .retrieve()//Sammelt das Ergegnis der Anfrage
                         .toEntity(MovieDBResponse.class)//Verwandelt es in das Gewünschte Objekt
                         .block()

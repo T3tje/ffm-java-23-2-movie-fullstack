@@ -12,12 +12,9 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@AllArgsConstructor
 public class MovieService {
-    @Autowired
+
     private final MovieRepository repo;
-    @Autowired
-    private final IdService idService;
 
     public List<MovieDTO> getAllMovies(){
         return repo.getAllMovies();

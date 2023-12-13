@@ -15,7 +15,7 @@ import java.util.List;
 @RequestMapping("/api/titles")
 @RequiredArgsConstructor
 public class MovieController {
-    @Autowired
+
     private final MovieService service;
 
     @GetMapping

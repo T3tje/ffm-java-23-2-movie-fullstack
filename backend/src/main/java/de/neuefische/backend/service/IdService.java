@@ -1,7 +1,9 @@
 package de.neuefische.backend.service;
 
-import java.util.UUID;
+import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+@NoArgsConstructor
 public class IdService {
 
     public String randomId(){
