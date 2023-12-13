@@ -1,0 +1,20 @@
+#movie-list {
+    list-style: none;
+    padding: 0;
+    margin: 5% auto;
+    width: 80vw;
+    border-radius: 10px;
+
+}
+
+.movie-item {
+    background-color: #3d3d3d;
+    color: #ffffff;
+    padding: 1em;
+    margin: 0.5em;
+    border-radius: 10px;
+}
+
+.movie-item:hover {
+    box-shadow: 0px 0px 12px 1px #d2b593;
+}
