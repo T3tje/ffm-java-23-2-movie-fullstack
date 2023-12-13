@@ -11,11 +11,9 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@AllArgsConstructor
 public class MovieService {
 
     private final MovieRepository repo;
-    private final IdService idService;
 
     public List<MovieDTO> getAllMovies(){
         return repo.getAllMovies();

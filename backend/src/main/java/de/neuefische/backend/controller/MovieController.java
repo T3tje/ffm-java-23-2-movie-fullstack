@@ -13,7 +13,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/titles")
 @RequiredArgsConstructor
-@AllArgsConstructor
 public class MovieController {
 
     private final MovieService service;
