@@ -8,23 +8,24 @@ type ListProps = {
 export default function List(props: ListProps) {
 
     return(
-        <ul>
-            {
-            props.movies.map(movie => {
-                return <MovieItem movie={movie} />
-            })
-        }
-        </ul>
+        <>
+            <ul className="movie-list">
+                {
+                props.movies.map(movie => {
+                    return <MovieItem movie={movie} />
+                })
+            }
+            </ul>
 
-        /*
-        <ul id="movie-list">
-            <li className="movie-item">The Shawshank Redemption</li>
-            <li className="movie-item">The Godfather</li>
-            <li className="movie-item">The Dark Knight</li>
-            <li className="movie-item">Pulp Fiction</li>
-            <li className="movie-item">Schindler's List</li>
-        </ul>
+            <div></div>
+            <ul id="movie-list">
+                <li className="movie-item">The Shawshank Redemption</li>
+                <li className="movie-item">The Godfather</li>
+                <li className="movie-item">The Dark Knight</li>
+                <li className="movie-item">Pulp Fiction</li>
+                <li className="movie-item">Schindler's List</li>
+            </ul>
+    </>
 
-         */
     )
 }

@@ -1,4 +1,5 @@
 import Movie from "./MoviesType.ts";
+import "./MovieItem.css";
 
 type MovieItemProps = {
     movie:Movie;
