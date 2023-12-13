@@ -1,5 +1,6 @@
 import "./List.css"
 import Movie from "./MoviesType.ts";
+import MovieItem from "./MovieItem.tsx";
 
 type ListProps = {
     movies : Movie[]
@@ -10,10 +11,11 @@ export default function List(props: ListProps) {
         <ul>
             {
             props.movies.map(movie => {
-                return <li className="movie-item">{movie.name}</li>
+                return <MovieItem movie={movie} />
             })
         }
         </ul>
+
         /*
         <ul id="movie-list">
             <li className="movie-item">The Shawshank Redemption</li>
