@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 
 @Repository
 @NoArgsConstructor
-@AllArgsConstructor
 public class MovieRepository {
     @Value("${API_KEY}")
     private String apiKey;
