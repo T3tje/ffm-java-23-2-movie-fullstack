@@ -8,7 +8,7 @@ type MovieItemProps = {
 
 const MovieItem = (props: MovieItemProps) => {
 
-    return <li className={"movie-item"}>{props.movie.name}</li>
+    return <li className={"movie-item"}>{props.movie.title}</li>
 }
 
 export default MovieItem
