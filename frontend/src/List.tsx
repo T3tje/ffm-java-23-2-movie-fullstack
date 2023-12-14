@@ -16,9 +16,10 @@ export default function List(props: ListProps) {
         setInput(event.target.value);
     }
 
-    const searchForFilm = async () => {
+    const searchForFilm = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
         try {
-            const response = await axios.get(`/api/${input}`);
+            const response = await axios.get(`/api/search/${input}`);
             const { data } = response;
 
             if (data.length > 0) {
@@ -35,13 +36,15 @@ export default function List(props: ListProps) {
     return(
         <>
             <div>
-                <input
-                    type="text"
-                    placeholder="Film suchen"
-                    onChange={handleInput}
-                    value={input}
-                />
-                <button onClick={searchForFilm}>suchen</button>
+                <form onSubmit={searchForFilm}>
+                    <input
+                        type="text"
+                        placeholder="Film suchen"
+                        onChange={handleInput}
+                        value={input}
+                    />
+                    <button>suchen</button>
+                </form>
             </div>
             <div id="movie-list">
                 <ul>
