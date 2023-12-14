@@ -3,7 +3,6 @@ package de.neuefische.backend.repository;
 import de.neuefische.backend.model.Movie;
 import de.neuefische.backend.model.MovieDBResponse;
 import de.neuefische.backend.model.MovieDTO;
-import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
@@ -21,7 +20,7 @@ public class MovieRepository {
     @Value("${API_KEY}")
     private String apiKey;
 
-    private Map<String, Movie> mapOfMovies = new HashMap<>();
+    //private Map<String, Movie> mapOfMovies = new HashMap<>();
 
     public List<MovieDTO> getAllMovies(){
 
@@ -35,6 +34,7 @@ public class MovieRepository {
                         .toEntity(MovieDBResponse.class)
                         .block()
         ).getBody();
+        assert response!=null;
         return response.results()
                 .stream()
                 .map(movie -> new MovieDTO(movie.id(), movie.titleText().text()))
