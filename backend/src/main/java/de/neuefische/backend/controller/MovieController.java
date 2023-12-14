@@ -15,8 +15,11 @@ public class MovieController {
     private final MovieService service;
 
     @GetMapping
-    public List<MovieDTO> getAllMovies(){
-        return service.getAllMovies();
+    public List<MovieDTO> getAllMovies(@RequestParam(name = "entries", required = false, defaultValue = "10") int entries ){
+        if(entries == 10){
+            return service.getAllMovies();
+        }
+        return service.getAllMovies("https://moviesdatabase.p.rapidapi.com/titles",entries);
     }
 
     @GetMapping("/search/{title}")
