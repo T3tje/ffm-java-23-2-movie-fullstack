@@ -28,4 +28,8 @@ public class MovieController {
     public List<MovieDTO> findMoviesByKeyword(@RequestParam String keyword){
         return service.findMoviesByKeyword(keyword);
     }
+    @GetMapping("/next")
+    public List<MovieDTO> getNext10Movies(){
+        return service.getNext10Movies();
+    }
 }

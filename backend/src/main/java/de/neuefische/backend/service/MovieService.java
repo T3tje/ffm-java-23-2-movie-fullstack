@@ -1,6 +1,7 @@
 package de.neuefische.backend.service;
 
 
+import de.neuefische.backend.model.Movie;
 import de.neuefische.backend.model.MovieDBResponse;
 import de.neuefische.backend.model.MovieDTO;
 import de.neuefische.backend.repository.MovieRepository;
@@ -21,32 +22,38 @@ public class MovieService {
     private final MovieRepository repo;
 
     public List<MovieDTO> getAllMovies(){
-        return movieDbGETResponse("https://moviesdatabase.p.rapidapi.com/titles");
+        return movieDbDTOResponse("https://moviesdatabase.p.rapidapi.com/titles");
     }
 
     public List<MovieDTO> findMoviesByTitle(String title) {
-        return movieDbGETResponse("https://moviesdatabase.p.rapidapi.com/titles/search/title/" + title);
+        return movieDbDTOResponse("https://moviesdatabase.p.rapidapi.com/titles/search/title/" + title);
     }
 
     public List<MovieDTO> findMoviesByKeyword(String keyword) {
-        return movieDbGETResponse("https://moviesdatabase.p.rapidapi.com/titles/search/keyword/" + keyword);
+        return movieDbDTOResponse("https://moviesdatabase.p.rapidapi.com/titles/search/keyword/" + keyword);
     }
 
-    private List<MovieDTO> movieDbGETResponse(String url){
+    private List<Movie> movieDbGETResponse(String url){
         MovieDBResponse response = Objects.requireNonNull(
-                WebClient.create()
-                        .get()
-                        .uri(url)
-                        .header("X-RapidAPI-Key", apiKey)
-                        .retrieve()
-                        .toEntity(MovieDBResponse.class)
+                WebClient.create()//Creates WebClient
+                        .get()//Sends GET Request to...
+                        .uri(url)//...this URL with the following header:
+                        .header("X-RapidAPI-Key", apiKey) //header of the GET-Request
+                        .retrieve()//Retrieve Data from the Response
+                        .toEntity(MovieDBResponse.class) //Turn it into the desired Datatype
                         .block()
-        ).getBody();
+        ).getBody(); // Get the Body of the Response
         assert response != null;
-        return response.results()
+        return response.results();
+    }
+    private List<MovieDTO> movieDbDTOResponse(String url){
+        return  movieDbGETResponse(url)//List of Movies
                 .stream()
-                .map(movie -> new MovieDTO(movie.id(),movie.titleText().text()))
-                .toList();
+                .map(movie -> new MovieDTO(movie.id(),movie.titleText().text())) //Turn each Movie into MovieDTO
+                .toList(); //Turn the Stream back to a List
+    }
+
+    public List<MovieDTO> getAllMovies(int amount) {
 
     }
 }
