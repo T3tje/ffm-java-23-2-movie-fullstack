@@ -17,29 +17,12 @@ import java.util.Objects;
 @Repository
 @NoArgsConstructor
 public class MovieRepository {
-    @Value("${API_KEY}")
-    private String apiKey;
+    //@Value("${API_KEY}")
+    //private String apiKey;
 
     //private Map<String, Movie> mapOfMovies = new HashMap<>();
 
-    public List<MovieDTO> getAllMovies(){
 
-        MovieDBResponse response = Objects.requireNonNull(
-                WebClient.create()
-                        .get()
-                        .uri("https://moviesdatabase.p.rapidapi.com/titles")
-                        .header("X-RapidAPI-Key",
-                                apiKey)
-                        .retrieve()
-                        .toEntity(MovieDBResponse.class)
-                        .block()
-        ).getBody();
-        assert response!=null;
-        return response.results()
-                .stream()
-                .map(movie -> new MovieDTO(movie.id(), movie.titleText().text()))
-                .toList();
-    }
 
 
 
