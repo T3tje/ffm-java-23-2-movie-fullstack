@@ -5,6 +5,7 @@ import de.neuefische.backend.service.MovieService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -19,5 +20,11 @@ public class MovieController {
     @GetMapping
     public List<MovieDTO> getAllMovies(){
         return service.getAllMovies();
+    }
+
+    @GetMapping("/search")
+    public List<MovieDTO> findMoviesByTitle(@RequestParam String title){
+        return service.findMoviesByTitle(title);
+
     }
 }
