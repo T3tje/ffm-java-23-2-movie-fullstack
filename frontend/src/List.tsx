@@ -7,6 +7,7 @@ import axios from "axios";
 type ListProps = {
     movies: Movie[],
     setMovies: Dispatch<SetStateAction<Movie[]>>
+    increaseListLengthBy10: Promise<void>
 }
 export default function List(props: ListProps) {
 
@@ -15,7 +16,6 @@ export default function List(props: ListProps) {
     const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
         setInput(event.target.value);
     }
-
     const searchForFilm = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         try {
@@ -27,8 +27,10 @@ export default function List(props: ListProps) {
             } else {
                 console.log("Keine Filme gefunden");
             }
+            return
         } catch (error) {
             console.error("Fehler beim Abrufen der Filmliste:", error);
+            return
         }
     };
 
@@ -55,6 +57,7 @@ export default function List(props: ListProps) {
                     }
                 </ul>
             </div>
+            <button id="mehrButton" onClick={() => props.increaseListLengthBy10}>mehr</button>
         </>
     )
 }
