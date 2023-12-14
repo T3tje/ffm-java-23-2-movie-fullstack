@@ -27,8 +27,10 @@ export default function List(props: ListProps) {
             } else {
                 console.log("Keine Filme gefunden");
             }
+            return
         } catch (error) {
             console.error("Fehler beim Abrufen der Filmliste:", error);
+            return
         }
     };
 
@@ -55,6 +57,7 @@ export default function List(props: ListProps) {
                     }
                 </ul>
             </div>
+            <button id="mehrButton">mehr</button>
         </>
     )
 }

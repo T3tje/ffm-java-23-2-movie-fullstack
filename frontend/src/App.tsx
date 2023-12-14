@@ -22,8 +22,10 @@ function App() {
             } else {
                 console.log("Keine Filme gefunden");
             }
+            return
         } catch (error) {
             console.error("Fehler beim Abrufen der Filmliste:", error);
+            return
         }
     };
 
