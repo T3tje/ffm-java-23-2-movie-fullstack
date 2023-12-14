@@ -57,10 +57,9 @@ public class MovieService {
     public List<MovieDTO> getAllMovies(String url, int amount) {
 
         int currentAmountofEntries = 0;
-        repo.setPreviousUrl(url);
         String currentUrl = url;
 
-        while(currentAmountofEntries<=amount-10) {
+        while(currentAmountofEntries<=amount-10 && currentUrl!=null ) {
             MovieDBResponse response = movieDbGETResponse(currentUrl);
             response.results().forEach(movie -> repo.getMapOfMovies().put(movie.id(), movie));
             currentUrl = response.next();
