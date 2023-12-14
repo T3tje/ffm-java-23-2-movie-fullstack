@@ -1,5 +1,6 @@
 type Movie = {
-    name:string
+    title:string,
+    id: string
 }
 
 export default Movie
