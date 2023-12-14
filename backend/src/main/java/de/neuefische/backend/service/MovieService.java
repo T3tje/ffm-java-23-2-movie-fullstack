@@ -40,4 +40,21 @@ public class MovieService {
                 .map(movie -> new MovieDTO(movie.id(),movie.titleText().text()))
                 .toList();
     }
+
+    public List<MovieDTO> findMoviesByKeyword(String keyword) {
+        MovieDBResponse response = Objects.requireNonNull(
+                WebClient.create()
+                        .get()
+                        .uri("https://moviesdatabase.p.rapidapi.com/titles/search/keyword/" + keyword)
+                        .header("X-RapidApi-Key", apiKey)
+                        .retrieve()
+                        .toEntity(MovieDBResponse.class)
+                        .block()
+        ).getBody();
+        assert response != null;
+        return response.results()
+                .stream()
+                .map(movie -> new MovieDTO(movie.id(),movie.titleText().text()))
+                .toList();
+    }
 }
