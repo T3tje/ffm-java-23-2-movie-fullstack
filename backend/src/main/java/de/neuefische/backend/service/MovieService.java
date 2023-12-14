@@ -33,7 +33,7 @@ public class MovieService {
         return movieDbDTOResponse("https://moviesdatabase.p.rapidapi.com/titles/search/keyword/" + keyword);
     }
 
-    private List<Movie> movieDbGETResponse(String url){
+    private MovieDBResponse movieDbGETResponse(String url){
         MovieDBResponse response = Objects.requireNonNull(
                 WebClient.create()//Creates WebClient
                         .get()//Sends GET Request to...
@@ -44,16 +44,33 @@ public class MovieService {
                         .block()
         ).getBody(); // Get the Body of the Response
         assert response != null;
-        return response.results();
+        return response;
     }
     private List<MovieDTO> movieDbDTOResponse(String url){
-        return  movieDbGETResponse(url)//List of Movies
+        return  movieDbGETResponse(url)
+                .results()//List of Movies
                 .stream()
                 .map(movie -> new MovieDTO(movie.id(),movie.titleText().text())) //Turn each Movie into MovieDTO
                 .toList(); //Turn the Stream back to a List
     }
 
-    public List<MovieDTO> getAllMovies(int amount) {
+    public List<MovieDTO> getAllMovies(String url, int amount) {
 
+        int currentAmountofEntries = 0;
+        repo.setPreviousUrl(url);
+        String currentUrl = url;
+
+        while(currentAmountofEntries<=amount-10) {
+            MovieDBResponse response = movieDbGETResponse(currentUrl);
+            response.results().forEach(movie -> repo.getMapOfMovies().put(movie.id(), movie));
+            currentUrl = response.next();
+            currentAmountofEntries +=10;
+        }
+
+        return repo.getMapOfMovies()
+                .values()
+                .stream()
+                .map(movie -> new MovieDTO(movie.id(), movie.titleText().text()))
+                .toList();
     }
 }

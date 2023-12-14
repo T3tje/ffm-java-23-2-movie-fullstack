@@ -25,9 +25,7 @@ public class MovieRepository {
     @Value("${API_KEY}")
     private String apiKey;
 
-    private final Map<String, Movie> mapOfMovies = new HashMap<>();
-    private  String previousUrl = ""; //Save which URL have been used to load the previous 10 Entries.
-
+    private  Map<String, Movie> mapOfMovies = new HashMap<>();
 
 
 
