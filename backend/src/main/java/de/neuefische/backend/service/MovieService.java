@@ -16,7 +16,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class MovieService {
     @Value("${API_KEY}")
-    private String apiKey;
+    private static String apiKey;
 
     private final MovieRepository repo;
 
@@ -25,27 +25,18 @@ public class MovieService {
     }
 
     public List<MovieDTO> findMoviesByTitle(String title) {
-        MovieDBResponse response = Objects.requireNonNull(
-                WebClient.create()
-                        .get()
-                        .uri("https://moviesdatabase.p.rapidapi.com/titles/search/title/" + title)
-                        .header("X-RapidApi-Key", apiKey)
-                        .retrieve()
-                        .toEntity(MovieDBResponse.class)
-                        .block()
-        ).getBody();
-        assert response != null;
-        return response.results()
-                .stream()
-                .map(movie -> new MovieDTO(movie.id(),movie.titleText().text()))
-                .toList();
+        return movieDbGETResponse("https://moviesdatabase.p.rapidapi.com/titles/search/title/" + title);
     }
 
     public List<MovieDTO> findMoviesByKeyword(String keyword) {
+        return movieDbGETResponse("https://moviesdatabase.p.rapidapi.com/titles/search/keyword/" + keyword);
+    }
+
+    private static List<MovieDTO> movieDbGETResponse(String url){
         MovieDBResponse response = Objects.requireNonNull(
                 WebClient.create()
                         .get()
-                        .uri("https://moviesdatabase.p.rapidapi.com/titles/search/keyword/" + keyword)
+                        .uri(url)
                         .header("X-RapidApi-Key", apiKey)
                         .retrieve()
                         .toEntity(MovieDBResponse.class)
@@ -56,5 +47,6 @@ public class MovieService {
                 .stream()
                 .map(movie -> new MovieDTO(movie.id(),movie.titleText().text()))
                 .toList();
+
     }
 }
