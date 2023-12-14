@@ -8,15 +8,15 @@ type ListProps = {
 export default function List(props: ListProps) {
 
     return(
+        <div id="movie-list">
+            <ul>
+                {
 
-        <ul className="movie-list">
-            {
-
-            props.movies.map(movie => {
-                return <MovieItem key={movie.id} movie={movie} />
-            })
-        }
-        </ul>
-
+                props.movies.map(movie => {
+                    return <MovieItem key={movie.id} movie={movie} />
+                })
+            }
+            </ul>
+        </div>
     )
 }
