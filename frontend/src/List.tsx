@@ -7,7 +7,7 @@ import axios from "axios";
 type ListProps = {
     movies: Movie[],
     setMovies: Dispatch<SetStateAction<Movie[]>>
-    increaseListLengthBy10: Promise<void>
+    increaseListLengthBy10: () => void
 }
 export default function List(props: ListProps) {
 
@@ -57,7 +57,7 @@ export default function List(props: ListProps) {
                     }
                 </ul>
             </div>
-            <button id="mehrButton" onClick={() => props.increaseListLengthBy10}>mehr</button>
+            <button id="mehrButton" onClick={props.increaseListLengthBy10}>mehr</button>
         </>
     )
 }
