@@ -8,15 +8,24 @@ type ListProps = {
 export default function List(props: ListProps) {
 
     return(
-        <div id="movie-list">
-            <ul>
-                {
+        <>
+            <div>
+                <input
+                    type="text"
+                    placeholder="Film suchen"
+                />
+                <button>suchen</button>
+            </div>
+            <div id="movie-list">
+                <ul>
+                    {
 
-                props.movies.map(movie => {
-                    return <MovieItem key={movie.id} movie={movie} />
-                })
-            }
-            </ul>
-        </div>
+                    props.movies.map(movie => {
+                        return <MovieItem key={movie.id} movie={movie} />
+                    })
+                }
+                </ul>
+            </div>
+        </>
     )
 }
