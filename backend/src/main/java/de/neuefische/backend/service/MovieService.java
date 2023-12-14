@@ -16,7 +16,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class MovieService {
     @Value("${API_KEY}")
-    private static String apiKey;
+    private String apiKey;
 
     private final MovieRepository repo;
 
@@ -32,12 +32,12 @@ public class MovieService {
         return movieDbGETResponse("https://moviesdatabase.p.rapidapi.com/titles/search/keyword/" + keyword);
     }
 
-    private static List<MovieDTO> movieDbGETResponse(String url){
+    private List<MovieDTO> movieDbGETResponse(String url){
         MovieDBResponse response = Objects.requireNonNull(
                 WebClient.create()
                         .get()
                         .uri(url)
-                        .header("X-RapidApi-Key", apiKey)
+                        .header("X-RapidAPI-Key", apiKey)
                         .retrieve()
                         .toEntity(MovieDBResponse.class)
                         .block()
