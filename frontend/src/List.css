@@ -26,7 +26,7 @@ input {
     margin: 37px 10px 20px 10px;
     width: 30vw;
     max-width: 500px;
-    min-width: 340px;
+    min-width: 200px;
     font-size: 1em;
     transition: border-color 0.25s;
 }
