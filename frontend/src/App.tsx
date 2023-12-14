@@ -9,18 +9,29 @@ function App() {
 
     const [movies, setMovies] = useState<Movie[]>([])
 
-    useEffect(() => getAllMovies, [])
-    const getAllMovies = ():void => {
-        axios.get("/api")
-            .then(response => {
-                response.data.length > 0 ? setMovies(response.data) : console.log("Keine Filme gefunden")
-            }).catch(error => console.log(error))
-    }
+    useEffect(() => {
+        getAllMovies();
+    }, []);
+    const getAllMovies = async (): Promise<void> => {
+        try {
+            const response = await axios.get("/api");
+            const { data } = response;
 
-  return (
+            if (data.length > 0) {
+                setMovies(data);
+            } else {
+                console.log("Keine Filme gefunden");
+            }
+        } catch (error) {
+            console.error("Fehler beim Abrufen der Filmliste:", error);
+        }
+    };
+
+
+    return (
     <>
         <Header getAllMovies={getAllMovies}/>
-        <List movies={movies}/>
+        <List movies={movies} setMovies={setMovies}/>
     </>
   )
 }

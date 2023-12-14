@@ -23,11 +23,16 @@ input {
     padding: 0.6em 1.2em;
     border-radius: 8px;
     border: solid 4px #3d3d3d;
-    margin: 20px 10px;
+    margin: 37px 10px 20px 10px;
     width: 30vw;
     max-width: 700px;
     min-width: 340px;
     font-size: 1em;
+    transition: border-color 0.25s;
+}
+
+input:hover {
+    border-color: #d2b593;
 }
 
 input:focus {
