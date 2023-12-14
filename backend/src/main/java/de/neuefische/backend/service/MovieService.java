@@ -21,7 +21,7 @@ public class MovieService {
     private final MovieRepository repo;
 
     public List<MovieDTO> getAllMovies(){
-        return repo.getAllMovies();
+        return movieDbGETResponse("https://moviesdatabase.p.rapidapi.com/titles");
     }
 
     public List<MovieDTO> findMoviesByTitle(String title) {
