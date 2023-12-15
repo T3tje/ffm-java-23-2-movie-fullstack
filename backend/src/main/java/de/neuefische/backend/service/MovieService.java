@@ -55,7 +55,7 @@ public class MovieService {
     }
 
     public List<MovieDTO> getAllMovies(String url, int amount,int limit) {
-        if(amount<=50){
+        if(amount<=limit){
             return movieDbDTOResponse(url +"?limit="+amount);
         }
 
@@ -63,17 +63,17 @@ public class MovieService {
         String baseUrl = "https://moviesdatabase.p.rapidapi.com/titles";
         String currentUrl = url;
 
-        while(currentAmountofEntries<=amount && currentUrl!=null ) {
-            if(amount-currentAmountofEntries<=50){
-                MovieDBResponse response = movieDbGETResponse(currentUrl + "?limit=" + amount);
+        while(currentAmountofEntries<amount && currentUrl!=null ) {
+            if(amount-currentAmountofEntries<=limit){
+                MovieDBResponse response = movieDbGETResponse(currentUrl + "&limit=" + amount);
                 response.results().forEach(movie -> repo.getMapOfMovies().put(movie.id(), movie));
                 currentAmountofEntries += amount;
             }
             else {
-                MovieDBResponse response = movieDbGETResponse(currentUrl);
+                MovieDBResponse response = movieDbGETResponse(currentUrl +"&limit=" + limit);
                 response.results().forEach(movie -> repo.getMapOfMovies().put(movie.id(), movie));
-                currentUrl = baseUrl + response.next() +"&limit=50";
-                currentAmountofEntries += 50;
+                currentUrl = baseUrl + response.next();
+                currentAmountofEntries += limit;
             }
         }
 
