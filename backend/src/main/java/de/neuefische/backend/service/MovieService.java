@@ -54,32 +54,32 @@ public class MovieService {
                 .toList(); //Turn the Stream back to a List
     }
 
-    public List<MovieDTO> getAllMovies(String url, int amount,int limit) {
-        if(amount<=limit){
-            return movieDbDTOResponse(url +"?limit="+amount);
+    public List<MovieDTO> getAllMovies(String url, int entries,int limit) {
+        if(entries<=limit){
+            return movieDbDTOResponse(url +"?limit="+entries);
         }
 
         int currentAmountofEntries = 0;
-        String baseUrl = "https://moviesdatabase.p.rapidapi.com/titles";
+        String baseUrl = "https://moviesdatabase.p.rapidapi.com";
         String currentUrl = url;
 
-        while(currentAmountofEntries<amount && currentUrl!=null ) {
+        while(currentAmountofEntries<entries && currentUrl!=null ) {
 
             if(currentAmountofEntries == 0){
-                MovieDBResponse response = movieDbGETResponse(currentUrl + "?limit=" + amount);
+                MovieDBResponse response = movieDbGETResponse(currentUrl + "/titles?limit=" + limit);
                 response.results().forEach(movie -> repo.getMapOfMovies().put(movie.id(), movie));
                 currentUrl = baseUrl + response.next();
-                currentAmountofEntries += amount;
+                currentAmountofEntries += limit;
 
             }
 
-            if(amount-currentAmountofEntries<limit){
-                MovieDBResponse response = movieDbGETResponse(currentUrl + "&limit=" + amount);
+            if(entries-currentAmountofEntries<limit){
+                MovieDBResponse response = movieDbGETResponse(currentUrl);
                 response.results().forEach(movie -> repo.getMapOfMovies().put(movie.id(), movie));
-                currentAmountofEntries += amount;
+                currentAmountofEntries += limit;
             }
             else {
-                MovieDBResponse response = movieDbGETResponse(currentUrl +"&limit=" + limit);
+                MovieDBResponse response = movieDbGETResponse(currentUrl);
                 response.results().forEach(movie -> repo.getMapOfMovies().put(movie.id(), movie));
                 currentUrl = baseUrl + response.next();
                 currentAmountofEntries += limit;
