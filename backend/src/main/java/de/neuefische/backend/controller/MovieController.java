@@ -19,7 +19,7 @@ public class MovieController {
         if(entries == 10){
             return service.getAllMovies();
         }
-        return service.getAllMovies("https://moviesdatabase.p.rapidapi.com/titles",entries,limit);
+        return service.getAllMovies("https://moviesdatabase.p.rapidapi.com/",entries,limit);
     }
 
     @GetMapping("/search/{title}")
