@@ -4,6 +4,7 @@ package de.neuefische.backend.repository;
 import de.neuefische.backend.model.Movie;
 import de.neuefische.backend.model.MovieDBResponse;
 import de.neuefische.backend.model.MovieDTO;
+import de.neuefische.backend.model.MovieExtendedInfo;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,6 +27,7 @@ public class MovieRepository {
     private String apiKey;
 
     private  Map<String, Movie> mapOfMovies = new HashMap<>();
+    private  Map<String, MovieExtendedInfo> mapOfMoviesWithExtendeInfo = new HashMap<>();
 
 
 
