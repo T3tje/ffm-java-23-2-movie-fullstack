@@ -10,9 +10,9 @@ function App() {
     const [movies, setMovies] = useState<Movie[]>([])
     const [listAmount, setListAmount] = useState(10)
 
-    const getAllMovies = async (): Promise<void> => {
+    const getAllMovies = async (amount:number): Promise<void> => {
         try {
-            const response = await axios.get(`/api?entries=${listAmount}`);
+            const response = await axios.get(`/api?entries=${amount}`);
             const { data } = response;
 
             if (data.length > 0) {
@@ -28,19 +28,20 @@ function App() {
     };
 
     useEffect(() => {
-        getAllMovies();
+        getAllMovies(listAmount);
     }, []);
 
 
     const increaseListLengthBy10 = () => {
-        setListAmount(listAmount + 10)
-        getAllMovies();
+        const newAmount: number = listAmount + 10;
+        setListAmount(newAmount)
+        getAllMovies(newAmount);
     }
 
 
     return (
     <>
-        <Header getAllMovies={getAllMovies}/>
+        <Header listAmount={listAmount} getAllMovies={getAllMovies}/>
         <List movies={movies} setMovies={setMovies} increaseListLengthBy10={increaseListLengthBy10}/>
     </>
   )

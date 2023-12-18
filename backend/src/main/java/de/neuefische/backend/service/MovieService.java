@@ -64,7 +64,16 @@ public class MovieService {
         String currentUrl = url;
 
         while(currentAmountofEntries<amount && currentUrl!=null ) {
-            if(amount-currentAmountofEntries<=limit){
+
+            if(currentAmountofEntries == 0){
+                MovieDBResponse response = movieDbGETResponse(currentUrl + "?limit=" + amount);
+                response.results().forEach(movie -> repo.getMapOfMovies().put(movie.id(), movie));
+                currentUrl = baseUrl + response.next();
+                currentAmountofEntries += amount;
+
+            }
+
+            if(amount-currentAmountofEntries<limit){
                 MovieDBResponse response = movieDbGETResponse(currentUrl + "&limit=" + amount);
                 response.results().forEach(movie -> repo.getMapOfMovies().put(movie.id(), movie));
                 currentAmountofEntries += amount;

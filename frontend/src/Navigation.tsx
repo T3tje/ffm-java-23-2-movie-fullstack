@@ -1,6 +1,7 @@
 
 type HeaderProps = {
-    getAllMovies: () => Promise<void>
+    listAmount: number,
+    getAllMovies: (amount:number) => void
 }
 
 export default function Navigation(props:HeaderProps) {
@@ -8,7 +9,7 @@ export default function Navigation(props:HeaderProps) {
     return(
 
         <div id="navigation">
-            <button onClick={() => props.getAllMovies()}>All Films</button>
+            <button onClick={() => props.getAllMovies(props.listAmount)}>All Films</button>
             <button>Favorites</button>
         </div>
 
