@@ -1,6 +1,7 @@
 package de.neuefische.backend.controller;
 
 import de.neuefische.backend.model.MovieDTO;
+import de.neuefische.backend.model.MovieSortDTO;
 import de.neuefische.backend.service.MovieService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -15,10 +16,7 @@ public class MovieController {
     private final MovieService service;
 
     @GetMapping
-    public List<MovieDTO> getAllMovies(@RequestParam(name = "entries", required = false, defaultValue = "10") int entries, @RequestParam(name = "limit", required = false, defaultValue = "10") int limit ){
-        if(entries == 10){
-            return service.getAllMovies();
-        }
+    public List<MovieSortDTO> getAllMovies(@RequestParam(name = "entries", required = false, defaultValue = "10") int entries, @RequestParam(name = "limit", required = false, defaultValue = "10") int limit ){
         return service.getAllMovies("https://moviesdatabase.p.rapidapi.com",entries,limit);
     }
 

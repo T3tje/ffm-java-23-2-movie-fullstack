@@ -1,9 +1,7 @@
 package de.neuefische.backend.service;
 
 
-import de.neuefische.backend.model.Movie;
-import de.neuefische.backend.model.MovieDBResponse;
-import de.neuefische.backend.model.MovieDTO;
+import de.neuefische.backend.model.*;
 import de.neuefische.backend.repository.MovieRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -46,6 +44,19 @@ public class MovieService {
         assert response != null;
         return response;
     }
+    private MovieExtendedInfoDBResponse movieExtendedInfoDbGETResponse(String url){
+        MovieExtendedInfoDBResponse response = Objects.requireNonNull(
+                WebClient.create()//Creates WebClient
+                        .get()//Sends GET Request to...
+                        .uri(url + "?info=base_info")//...this URL with the following header:
+                        .header("X-RapidAPI-Key", apiKey) //header of the GET-Request
+                        .retrieve()//Retrieve Data from the Response
+                        .toEntity(MovieExtendedInfoDBResponse.class) //Turn it into the desired Datatype
+                        .block()
+        ).getBody(); // Get the Body of the Response
+        assert response != null;
+        return response;
+    }
     private List<MovieDTO> movieDbDTOResponse(String url){
         return  movieDbGETResponse(url)
                 .results()//List of Movies
@@ -54,9 +65,21 @@ public class MovieService {
                 .toList(); //Turn the Stream back to a List
     }
 
-    public List<MovieDTO> getAllMovies(String url, int entries,int limit) {
+    private List<MovieSortDTO> movieSortDTOSResponse(String url){
+        return  movieExtendedInfoDbGETResponse(url + "&info=base_info")
+                .results()//List of Movies
+                .stream()
+                .map(movieExtendedInfo -> new MovieSortDTO(
+                        movieExtendedInfo.id(),
+                        movieExtendedInfo.titleText().text(),
+                        movieExtendedInfo.ratingsSummary().aggregateRating(),
+                        movieExtendedInfo.releaseYear().year()) )//Turn each Movie into MovieDTO
+                .toList(); //Turn the Stream back to a List
+    }
+
+    public List<MovieSortDTO> getAllMovies(String url, int entries,int limit) {
         if(entries<=limit){
-            return movieDbDTOResponse(url +"?limit="+entries);
+            return movieSortDTOSResponse(url +"?limit="+entries);
         }
 
         int currentAmountofEntries = 0;
@@ -66,7 +89,7 @@ public class MovieService {
         while(currentAmountofEntries<entries && currentUrl!=null ) {
 
             if(currentAmountofEntries == 0){
-                MovieDBResponse response = movieDbGETResponse(currentUrl + "/titles?limit=" + limit);
+                MovieExtendedInfoDBResponse response = movieExtendedInfoDbGETResponse(currentUrl + "/titles?limit=" + limit);
                 response.results().forEach(movie -> repo.getMapOfMovies().put(movie.id(), movie));
                 currentUrl = baseUrl + response.next();
                 currentAmountofEntries += limit;
@@ -74,22 +97,26 @@ public class MovieService {
             }
 
             if(entries-currentAmountofEntries<limit){
-                MovieDBResponse response = movieDbGETResponse(currentUrl);
+                MovieExtendedInfoDBResponse response = movieExtendedInfoDbGETResponse(currentUrl);
                 response.results().forEach(movie -> repo.getMapOfMovies().put(movie.id(), movie));
                 currentAmountofEntries += limit;
             }
             else {
-                MovieDBResponse response = movieDbGETResponse(currentUrl);
+                MovieExtendedInfoDBResponse response = movieExtendedInfoDbGETResponse(currentUrl);
                 response.results().forEach(movie -> repo.getMapOfMovies().put(movie.id(), movie));
                 currentUrl = baseUrl + response.next();
                 currentAmountofEntries += limit;
             }
         }
 
-        return repo.getMapOfMovies()
+        return repo.getMapOfMoviesWithExtendeInfo()
                 .values()
                 .stream()
-                .map(movie -> new MovieDTO(movie.id(), movie.titleText().text()))
+                .map(movie -> new MovieSortDTO(movie.id(),
+                        movie.titleText().text(),
+                        movie.ratingsSummary().aggregateRating(),
+                        movie.releaseYear().year()
+                ))
                 .toList();
     }
 }
