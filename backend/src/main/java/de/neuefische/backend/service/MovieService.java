@@ -90,7 +90,11 @@ public class MovieService {
 
             if(currentAmountofEntries == 0){
                 MovieExtendedInfoDBResponse response = movieExtendedInfoDbGETResponse(currentUrl + "/titles?limit=" + limit);
-                response.results().forEach(movie -> repo.getMapOfMovies().put(movie.id(), movie));
+                response.results().forEach(movie -> new MovieSortDTO(movie.id(),
+                        movie.titleText().text(),
+                        movie.ratingsSummary().aggregateRating(),
+                        movie.releaseYear().year()
+                ));
                 currentUrl = baseUrl + response.next();
                 currentAmountofEntries += limit;
 
@@ -98,12 +102,20 @@ public class MovieService {
 
             if(entries-currentAmountofEntries<limit){
                 MovieExtendedInfoDBResponse response = movieExtendedInfoDbGETResponse(currentUrl);
-                response.results().forEach(movie -> repo.getMapOfMovies().put(movie.id(), movie));
+                response.results().forEach(movie -> new MovieSortDTO(movie.id(),
+                        movie.titleText().text(),
+                        movie.ratingsSummary().aggregateRating(),
+                        movie.releaseYear().year()
+                ));
                 currentAmountofEntries += limit;
             }
             else {
                 MovieExtendedInfoDBResponse response = movieExtendedInfoDbGETResponse(currentUrl);
-                response.results().forEach(movie -> repo.getMapOfMovies().put(movie.id(), movie));
+                response.results().forEach(movie -> new MovieSortDTO(movie.id(),
+                        movie.titleText().text(),
+                        movie.ratingsSummary().aggregateRating(),
+                        movie.releaseYear().year()
+                ));
                 currentUrl = baseUrl + response.next();
                 currentAmountofEntries += limit;
             }
