@@ -1,7 +1,8 @@
 type Movie = {
     title:string,
     id: string,
-    year: number
+    year: number,
+    url: string
 }
 
 export default Movie

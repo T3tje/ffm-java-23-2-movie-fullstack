@@ -13,7 +13,7 @@ const MoviePopup: React.FC<MoviePopupProps> = ({ movie, onClose }) => {
                 <button className="close-btn" onClick={onClose}>schließen</button>
                 {/* Hier die Movie-Informationen anzeigen */}
                 <h1>{movie.title}</h1>
-
+                <img src={movie.url} />
                 <p>Erscheinungsjahr {movie.year}</p>
 
 

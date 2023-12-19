@@ -1,9 +1,7 @@
 package de.neuefische.backend.service;
 
 
-import de.neuefische.backend.model.Movie;
-import de.neuefische.backend.model.MovieDBResponse;
-import de.neuefische.backend.model.MovieDTO;
+import de.neuefische.backend.model.*;
 import de.neuefische.backend.repository.MovieRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -50,7 +48,10 @@ public class MovieService {
         return  movieDbGETResponse(url)
                 .results()//List of Movies
                 .stream()
-                .map(movie -> new MovieDTO(movie.id(),movie.titleText().text(),movie.releaseYear().year())) //Turn each Movie into MovieDTO
+                .map(movie -> new MovieDTO(movie.id(),movie.titleText().text(),movie.releaseYear().year(), movie.primaryImage().orElse(
+                        new Image("",0,0,"",new Caption(""))
+                ).url()
+                ))//Turn each Movie into MovieDTO
                 .toList(); //Turn the Stream back to a List
     }
 
@@ -89,7 +90,9 @@ public class MovieService {
         return repo.getMapOfMovies()
                 .values()
                 .stream()
-                .map(movie -> new MovieDTO(movie.id(), movie.titleText().text(), movie.releaseYear().year()))
+                .map(movie -> new MovieDTO(movie.id(), movie.titleText().text(), movie.releaseYear().year(), movie.primaryImage().orElse(
+                        new Image("",0,0,"",new Caption(""))
+                ).url()))
                 .toList();
     }
 }
