@@ -31,19 +31,6 @@ public class MovieService {
         return movieSortDTOSResponse("https://moviesdatabase.p.rapidapi.com/titles/search/keyword/" + keyword);
     }
 
-    private MovieDBResponse movieDbGETResponse(String url){
-        MovieDBResponse response = Objects.requireNonNull(
-                WebClient.create()//Creates WebClient.
-                        .get()//Sends GET Request to...
-                        .uri(url)//...this URL with the following header:
-                        .header("X-RapidAPI-Key", apiKey) //header of the GET-Request.
-                        .retrieve()//Retrieve Data from the Response.
-                        .toEntity(MovieDBResponse.class) //Turns it into the desired Datatype.
-                        .block()
-        ).getBody(); // Get the Body of the Response
-        assert response != null;
-        return response;
-    }
     private MovieExtendedInfoDBResponse movieExtendedInfoDbGETResponse(String url){
         MovieExtendedInfoDBResponse response = Objects.requireNonNull(
                 WebClient.create()  //Creates WebClient.
@@ -56,13 +43,6 @@ public class MovieService {
         ).getBody(); // Get the Body of the Response.
         assert response != null;
         return response;
-    }
-    private List<MovieDTO> movieDbDTOResponse(String url){
-        return  movieDbGETResponse(url)
-                .results()  //List of Movies.
-                .stream()
-                .map(movie -> new MovieDTO(movie.id(),movie.titleText().text())) //Turn each Movie into MovieDTO.
-                .toList(); //Turn the Stream back to a List.
     }
 
     private List<MovieSortDTO> movieSortDTOSResponse(String url){
