@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -19,16 +20,15 @@ public class MovieService {
 
     private final MovieRepository repo;
 
-    public List<MovieDTO> getAllMovies(){
-        return movieDbDTOResponse("https://moviesdatabase.p.rapidapi.com/titles");
+
+
+
+    public List<MovieSortDTO> findMoviesByTitle(String title) {
+        return movieSortDTOSResponse("https://moviesdatabase.p.rapidapi.com/titles/search/title/" + title);
     }
 
-    public List<MovieDTO> findMoviesByTitle(String title) {
-        return movieDbDTOResponse("https://moviesdatabase.p.rapidapi.com/titles/search/title/" + title);
-    }
-
-    public List<MovieDTO> findMoviesByKeyword(String keyword) {
-        return movieDbDTOResponse("https://moviesdatabase.p.rapidapi.com/titles/search/keyword/" + keyword);
+    public List<MovieSortDTO> findMoviesByKeyword(String keyword) {
+        return movieSortDTOSResponse("https://moviesdatabase.p.rapidapi.com/titles/search/keyword/" + keyword);
     }
 
     private MovieDBResponse movieDbGETResponse(String url){
@@ -46,11 +46,11 @@ public class MovieService {
     }
     private MovieExtendedInfoDBResponse movieExtendedInfoDbGETResponse(String url){
         MovieExtendedInfoDBResponse response = Objects.requireNonNull(
-                WebClient.create()//Creates WebClient
-                        .get()//Sends GET Request to...
-                        .uri(url + "?info=base_info")//...this URL with the following header:
+                WebClient.create()  //Creates WebClient
+                        .get()  //Sends GET Request to...
+                        .uri(url)   //...this URL with the following header:
                         .header("X-RapidAPI-Key", apiKey) //header of the GET-Request
-                        .retrieve()//Retrieve Data from the Response
+                        .retrieve() //Retrieve Data from the Response
                         .toEntity(MovieExtendedInfoDBResponse.class) //Turn it into the desired Datatype
                         .block()
         ).getBody(); // Get the Body of the Response
@@ -59,76 +59,109 @@ public class MovieService {
     }
     private List<MovieDTO> movieDbDTOResponse(String url){
         return  movieDbGETResponse(url)
-                .results()//List of Movies
+                .results()  //List of Movies
                 .stream()
                 .map(movie -> new MovieDTO(movie.id(),movie.titleText().text())) //Turn each Movie into MovieDTO
                 .toList(); //Turn the Stream back to a List
     }
 
     private List<MovieSortDTO> movieSortDTOSResponse(String url){
-        return  movieExtendedInfoDbGETResponse(url + "&info=base_info")
-                .results()//List of Movies
+        return  movieExtendedInfoDbGETResponse(url)
+                .results()  //List of MovieExtendedInfo Objects
                 .stream()
                 .map(movieExtendedInfo -> new MovieSortDTO(
                         movieExtendedInfo.id(),
                         movieExtendedInfo.titleText().text(),
-                        movieExtendedInfo.ratingsSummary().aggregateRating(),
-                        movieExtendedInfo.releaseYear().year()) )//Turn each Movie into MovieDTO
+                        movieExtendedInfo.ratingsSummary().orElse(
+                                new RatingsSummary(0.0,0)
+                        ).aggregateRating(),
+                        movieExtendedInfo.releaseYear().year(),
+                        movieExtendedInfo.primaryImage().orElse(new Image(
+                                " ",0,0,"none",new Caption("none"))).url()))   //Turn each Movie into MovieSortDTO
                 .toList(); //Turn the Stream back to a List
     }
 
-    public List<MovieSortDTO> getAllMovies(String url, int entries,int limit) {
-        if(entries<=limit){
-            return movieSortDTOSResponse(url +"?limit="+entries);
-        }
+    public List<MovieSortDTO> getAllMovies(String url, int entries, int limit) {
 
         int currentAmountofEntries = 0;
+        if(entries<limit){
+            MovieExtendedInfoDBResponse response = movieExtendedInfoDbGETResponse(url + "/titles?limit=" + entries +"&info=base_info");
+            response.results().
+                    forEach(movieExtendedInfo -> repo.getMapOfMoviesWithExtendedInfo().put(
+                    movieExtendedInfo.id(),
+                    movieExtendedInfo));
+            currentAmountofEntries += entries;
+
+
+        }
+
+
         String baseUrl = "https://moviesdatabase.p.rapidapi.com";
         String currentUrl = url;
 
         while(currentAmountofEntries<entries && currentUrl!=null ) {
 
             if(currentAmountofEntries == 0){
-                MovieExtendedInfoDBResponse response = movieExtendedInfoDbGETResponse(currentUrl + "/titles?limit=" + limit);
-                response.results().forEach(movie -> new MovieSortDTO(movie.id(),
-                        movie.titleText().text(),
-                        movie.ratingsSummary().aggregateRating(),
-                        movie.releaseYear().year()
-                ));
+
+                MovieExtendedInfoDBResponse response = movieExtendedInfoDbGETResponse(baseUrl + "/titles?limit=" + limit +"&info=base_info");
+                response
+                        .results()
+                        .forEach(movie -> repo.getMapOfMoviesWithExtendedInfo().put(movie.id(), movie));
                 currentUrl = baseUrl + response.next();
                 currentAmountofEntries += limit;
+                System.out.println(currentAmountofEntries);
 
             }
 
             if(entries-currentAmountofEntries<limit){
+
                 MovieExtendedInfoDBResponse response = movieExtendedInfoDbGETResponse(currentUrl);
-                response.results().forEach(movie -> new MovieSortDTO(movie.id(),
-                        movie.titleText().text(),
-                        movie.ratingsSummary().aggregateRating(),
-                        movie.releaseYear().year()
-                ));
-                currentAmountofEntries += limit;
-            }
-            else {
-                MovieExtendedInfoDBResponse response = movieExtendedInfoDbGETResponse(currentUrl);
-                response.results().forEach(movie -> new MovieSortDTO(movie.id(),
-                        movie.titleText().text(),
-                        movie.ratingsSummary().aggregateRating(),
-                        movie.releaseYear().year()
-                ));
+                response
+                        .results()
+                        .forEach(movie -> repo.getMapOfMoviesWithExtendedInfo().put(movie.id(), movie));
                 currentUrl = baseUrl + response.next();
                 currentAmountofEntries += limit;
+                System.out.println(currentAmountofEntries);
+            }
+            else {
+
+                MovieExtendedInfoDBResponse response = movieExtendedInfoDbGETResponse(currentUrl);
+                response
+                        .results()
+                        .forEach(movie -> repo.getMapOfMoviesWithExtendedInfo().put(movie.id(), movie));
+                currentUrl = baseUrl + response.next();
+                currentAmountofEntries += limit;
+                System.out.println(currentAmountofEntries);
             }
         }
 
-        return repo.getMapOfMoviesWithExtendeInfo()
+        List<MovieSortDTO> list = new java.util.ArrayList<>(repo.getMapOfMoviesWithExtendedInfo()
                 .values()
                 .stream()
-                .map(movie -> new MovieSortDTO(movie.id(),
+                .map(movie -> new MovieSortDTO(
+                        movie.id(),
                         movie.titleText().text(),
-                        movie.ratingsSummary().aggregateRating(),
-                        movie.releaseYear().year()
+                        movie.ratingsSummary().orElse(
+                                new RatingsSummary(0.0,0)
+                        ).aggregateRating(),
+                        movie.releaseYear().year(),
+                        movie.primaryImage().orElse(new Image(
+                                " ",0,0,"none",new Caption("none"))).url()
                 ))
-                .toList();
+                .toList());
+        list.sort(new Comparator<MovieSortDTO>() {
+            @Override
+            public int compare(MovieSortDTO o1, MovieSortDTO o2) {
+                if(o1.rating()>o2.rating()){
+                    return -1;
+                } else if (o2.rating()>o1.rating()) {
+                    return 1;
+
+                }
+                return 0;
+            }
+        });
+        System.out.println(list.size());
+        return list;
     }
 }
