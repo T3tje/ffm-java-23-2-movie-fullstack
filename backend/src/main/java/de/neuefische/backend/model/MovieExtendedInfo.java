@@ -1,14 +1,13 @@
 package de.neuefische.backend.model;
 
+import java.util.Optional;
+
 public record MovieExtendedInfo(
         String id,
-        RatingsSummary ratingsSummary,
-        Image primaryImage,
+        Optional<Image> primaryImage,
+        Optional<RatingsSummary> ratingsSummary,
         MovieType titleType,
-
-        Genre[] genres,
         TitleText titleText,
-        TitleText originalTitleText,
         ReleaseYear releaseYear
 
 ) {
