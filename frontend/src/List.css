@@ -50,4 +50,8 @@ input::placeholder {
     bottom: 10px;
 }
 
+#listTitle {
+    color: white;
+    margin: 0px 10px 12px 10px;
+}
 

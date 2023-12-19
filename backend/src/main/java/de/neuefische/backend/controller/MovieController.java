@@ -31,4 +31,11 @@ public class MovieController {
     public List<MovieDTO> findMoviesByKeyword(@RequestParam String keyword){
         return service.findMoviesByKeyword(keyword);
     }
+
+    @GetMapping("/favorites")
+    public List<MovieDTO> getFavorites() {
+
+
+        return service.getFavorites();
+    }
 }

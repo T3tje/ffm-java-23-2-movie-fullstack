@@ -7,11 +7,13 @@ import de.neuefische.backend.model.MovieDTO;
 import de.neuefische.backend.repository.MovieRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -92,4 +94,17 @@ public class MovieService {
                 .map(movie -> new MovieDTO(movie.id(), movie.titleText().text()))
                 .toList();
     }
+
+    public List<MovieDTO> getFavorites() {
+        List<MovieDTO> movies = repo.getMovieMongoRepository().findAll();
+        System.out.println("Found movies in MongoDB: " + movies);
+
+        List<MovieDTO> result = movies.stream()
+                .map(movie -> new MovieDTO(movie.id(), movie.title()))
+                .collect(Collectors.toList());
+
+        System.out.println("Returning result: " + result);
+        return result;
+    }
+
 }

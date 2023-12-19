@@ -5,9 +5,11 @@ import {Dispatch, SetStateAction, useState} from "react";
 import axios from "axios";
 
 type ListProps = {
-    movies: Movie[],
-    setMovies: Dispatch<SetStateAction<Movie[]>>
-    increaseListLengthBy10: () => void
+    itemsForList: Movie[],
+    setMovies?: Dispatch<SetStateAction<Movie[]>>
+    increaseListLengthBy10: () => void,
+    setFavorites?: Dispatch<SetStateAction<Movie[]>>,
+    title: string
 }
 export default function List(props: ListProps) {
 
@@ -22,7 +24,7 @@ export default function List(props: ListProps) {
             const response = await axios.get(`/api/search/${input}`);
             const { data } = response;
 
-            if (data.length > 0) {
+            if (data.length > 0 && props.setMovies) {
                 props.setMovies(data);
             } else {
                 console.log("Keine Filme gefunden");
@@ -50,8 +52,9 @@ export default function List(props: ListProps) {
             </div>
             <div id="movie-list">
                 <ul>
+                    <h2 id="listTitle">{props.title}</h2>
                     {
-                        props.movies.map(movie => {
+                        props.itemsForList.map(movie => {
                             return <MovieItem key={movie.id} movie={movie} />
                         })
                     }

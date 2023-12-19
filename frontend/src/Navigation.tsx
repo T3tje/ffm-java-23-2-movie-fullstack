@@ -1,16 +1,13 @@
 
-type HeaderProps = {
-    listAmount: number,
-    getAllMovies: (amount:number) => void
-}
+import { Link } from "react-router-dom";
 
-export default function Navigation(props:HeaderProps) {
+export default function Navigation() {
 
     return(
 
         <div id="navigation">
-            <button onClick={() => props.getAllMovies(props.listAmount)}>All Films</button>
-            <button>Favorites</button>
+            <Link to="/" ><button>All Movies</button></Link>
+            <Link to="/favorites"><button>Favorites</button></Link>
         </div>
 
     )
