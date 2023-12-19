@@ -27,7 +27,7 @@ public class MovieRepository {
     private String apiKey;
 
     private  Map<String, Movie> mapOfMovies = new HashMap<>();
-    private  Map<String, MovieExtendedInfo> mapOfMoviesWithExtendeInfo = new HashMap<>();
+    private  Map<String, MovieExtendedInfo> mapOfMoviesWithExtendedInfo = new HashMap<>();
 
 
 
