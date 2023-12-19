@@ -131,17 +131,14 @@ public class MovieService {
     }
 
     public static void sortingMovieSortDTOList(List<MovieSortDTO> list){
-        list.sort(new Comparator<MovieSortDTO>() {
-            @Override
-            public int compare(MovieSortDTO o1, MovieSortDTO o2) {
-                if(o1.rating()>o2.rating()){
-                    return -1;
-                } else if (o2.rating()>o1.rating()) {
-                    return 1;
+        list.sort((o1, o2) -> {
+            if(o1.rating()>o2.rating()){
+                return -1;
+            } else if (o2.rating()>o1.rating()) {
+                return 1;
 
-                }
-                return 0;
             }
+            return 0;
         });
     }
 }

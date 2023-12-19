@@ -1,6 +1,5 @@
 package de.neuefische.backend.controller;
 
-import de.neuefische.backend.model.MovieDTO;
 import de.neuefische.backend.model.MovieSortDTO;
 import de.neuefische.backend.service.MovieService;
 import lombok.RequiredArgsConstructor;
