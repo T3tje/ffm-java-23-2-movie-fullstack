@@ -17,16 +17,16 @@ public class MovieController {
 
     @GetMapping
     public List<MovieSortDTO> getAllMovies(@RequestParam(name = "entries", required = false, defaultValue = "10") int entries, @RequestParam(name = "limit", required = false, defaultValue = "10") int limit ){
-        return service.getAllMovies("https://moviesdatabase.p.rapidapi.com",entries,limit);
+        return service.getAllMovies("https://moviesdatabase.p.rapidapi.com", entries ,limit);
     }
 
     @GetMapping("/search/{title}")
-    public List<MovieDTO> findMoviesByTitle(@PathVariable String title){
+    public List<MovieSortDTO> findMoviesByTitle(@PathVariable String title){
         return service.findMoviesByTitle(title);
 
     }
     @GetMapping("/search")
-    public List<MovieDTO> findMoviesByKeyword(@RequestParam String keyword){
+    public List<MovieSortDTO> findMoviesByKeyword(@RequestParam String keyword){
         return service.findMoviesByKeyword(keyword);
     }
 }
