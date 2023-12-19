@@ -50,7 +50,7 @@ public class MovieService {
         return  movieDbGETResponse(url)
                 .results()//List of Movies
                 .stream()
-                .map(movie -> new MovieDTO(movie.id(),movie.titleText().text())) //Turn each Movie into MovieDTO
+                .map(movie -> new MovieDTO(movie.id(),movie.titleText().text(),movie.releaseYear().year())) //Turn each Movie into MovieDTO
                 .toList(); //Turn the Stream back to a List
     }
 
@@ -89,7 +89,7 @@ public class MovieService {
         return repo.getMapOfMovies()
                 .values()
                 .stream()
-                .map(movie -> new MovieDTO(movie.id(), movie.titleText().text()))
+                .map(movie -> new MovieDTO(movie.id(), movie.titleText().text(), movie.releaseYear().year()))
                 .toList();
     }
 }

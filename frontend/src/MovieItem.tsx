@@ -1,14 +1,22 @@
+import React from 'react';
 import Movie from "./MoviesType.ts";
 import "./MovieItem.css";
 
 type MovieItemProps = {
-    movie:Movie;
+    movie: Movie;
+    onSelect: (movie: Movie) => void; // Hinzugefügt
 };
 
+const MovieItem: React.FC<MovieItemProps> = (props) => {
+    const handleClick = () => {
+        props.onSelect(props.movie);
+    }
 
-const MovieItem = (props: MovieItemProps) => {
+    return (
+        <li className={"movie-item"} onClick={handleClick}>
+            {props.movie.title}
+        </li>
+    );
+};
 
-    return <li className={"movie-item"}>{props.movie.title}</li>
-}
-
-export default MovieItem
+export default MovieItem;
