@@ -33,12 +33,12 @@ public class MovieService {
 
     private MovieDBResponse movieDbGETResponse(String url){
         MovieDBResponse response = Objects.requireNonNull(
-                WebClient.create()//Creates WebClient
+                WebClient.create()//Creates WebClient.
                         .get()//Sends GET Request to...
                         .uri(url)//...this URL with the following header:
-                        .header("X-RapidAPI-Key", apiKey) //header of the GET-Request
-                        .retrieve()//Retrieve Data from the Response
-                        .toEntity(MovieDBResponse.class) //Turn it into the desired Datatype
+                        .header("X-RapidAPI-Key", apiKey) //header of the GET-Request.
+                        .retrieve()//Retrieve Data from the Response.
+                        .toEntity(MovieDBResponse.class) //Turns it into the desired Datatype.
                         .block()
         ).getBody(); // Get the Body of the Response
         assert response != null;
@@ -46,23 +46,23 @@ public class MovieService {
     }
     private MovieExtendedInfoDBResponse movieExtendedInfoDbGETResponse(String url){
         MovieExtendedInfoDBResponse response = Objects.requireNonNull(
-                WebClient.create()  //Creates WebClient
+                WebClient.create()  //Creates WebClient.
                         .get()  //Sends GET Request to...
                         .uri(url)   //...this URL with the following header:
-                        .header("X-RapidAPI-Key", apiKey) //header of the GET-Request
-                        .retrieve() //Retrieve Data from the Response
-                        .toEntity(MovieExtendedInfoDBResponse.class) //Turn it into the desired Datatype
+                        .header("X-RapidAPI-Key", apiKey) //header of the GET-Request.
+                        .retrieve() //Retrieve Data from the Response.
+                        .toEntity(MovieExtendedInfoDBResponse.class) //Turns it into the desired Datatype.
                         .block()
-        ).getBody(); // Get the Body of the Response
+        ).getBody(); // Get the Body of the Response.
         assert response != null;
         return response;
     }
     private List<MovieDTO> movieDbDTOResponse(String url){
         return  movieDbGETResponse(url)
-                .results()  //List of Movies
+                .results()  //List of Movies.
                 .stream()
-                .map(movie -> new MovieDTO(movie.id(),movie.titleText().text())) //Turn each Movie into MovieDTO
-                .toList(); //Turn the Stream back to a List
+                .map(movie -> new MovieDTO(movie.id(),movie.titleText().text())) //Turn each Movie into MovieDTO.
+                .toList(); //Turn the Stream back to a List.
     }
 
     private List<MovieSortDTO> movieSortDTOSResponse(String url){
@@ -77,8 +77,8 @@ public class MovieService {
                         ).aggregateRating(),
                         movieExtendedInfo.releaseYear().year(),
                         movieExtendedInfo.primaryImage().orElse(new Image(
-                                " ",0,0,"none",new Caption("none"))).url()))   //Turn each Movie into MovieSortDTO
-                .toList(); //Turn the Stream back to a List
+                                " ",0,0,"none",new Caption("none"))).url()))   //Turn each Movie into MovieSortDTO.
+                .toList(); //Turn the Stream back to a List.
     }
 
     public List<MovieSortDTO> getAllMovies(String url, int entries, int limit) {
@@ -109,7 +109,6 @@ public class MovieService {
                         .forEach(movie -> repo.getMapOfMoviesWithExtendedInfo().put(movie.id(), movie));
                 currentUrl = baseUrl + response.next();
                 currentAmountofEntries += limit;
-                System.out.println(currentAmountofEntries);
 
             }
 
@@ -121,7 +120,6 @@ public class MovieService {
                         .forEach(movie -> repo.getMapOfMoviesWithExtendedInfo().put(movie.id(), movie));
                 currentUrl = baseUrl + response.next();
                 currentAmountofEntries += limit;
-                System.out.println(currentAmountofEntries);
             }
             else {
 
@@ -131,7 +129,6 @@ public class MovieService {
                         .forEach(movie -> repo.getMapOfMoviesWithExtendedInfo().put(movie.id(), movie));
                 currentUrl = baseUrl + response.next();
                 currentAmountofEntries += limit;
-                System.out.println(currentAmountofEntries);
             }
         }
 
@@ -149,6 +146,11 @@ public class MovieService {
                                 " ",0,0,"none",new Caption("none"))).url()
                 ))
                 .toList());
+        sortingMovieSortDTOList(list);
+        return list;
+    }
+
+    public static void sortingMovieSortDTOList(List<MovieSortDTO> list){
         list.sort(new Comparator<MovieSortDTO>() {
             @Override
             public int compare(MovieSortDTO o1, MovieSortDTO o2) {
@@ -161,7 +163,5 @@ public class MovieService {
                 return 0;
             }
         });
-        System.out.println(list.size());
-        return list;
     }
 }
