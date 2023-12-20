@@ -30,7 +30,7 @@ public class MovieService {
         if(entries<limit){
             MovieExtendedInfoDBResponse response = movieExtendedInfoDbGETResponse("https://moviesdatabase.p.rapidapi.com/titles/search/title/" + title);
             response.results().
-                    forEach(movieExtendedInfo -> repo.getMapOfMoviesWithExtendedInfo().put(
+                    forEach(movieExtendedInfo -> repo.getMapOfMoviesExtendedForSearch().put(
                             movieExtendedInfo.id(),
                             movieExtendedInfo));
             currentAmountofEntries += entries;
@@ -46,24 +46,24 @@ public class MovieService {
 
             if(currentAmountofEntries == 0){
 
-                currentUrl = moviePutInList(baseUrl,baseUrl + "/titles?limit=" + limit +"&info=base_info");
+                currentUrl = moviePutInListSearch(baseUrl,"https://moviesdatabase.p.rapidapi.com/titles/search/title/" + title);
                 currentAmountofEntries += limit;
 
             }
 
             if(entries-currentAmountofEntries<limit){
 
-                currentUrl=moviePutInList(baseUrl,currentUrl);
+                currentUrl=moviePutInListSearch(baseUrl,currentUrl);
                 currentAmountofEntries += limit;
             }
             else {
 
-                currentUrl = moviePutInList(baseUrl,currentUrl);
+                currentUrl = moviePutInListSearch(baseUrl,currentUrl);
                 currentAmountofEntries += limit;
             }
         }
 
-        List<MovieSortDTO> list = new java.util.ArrayList<>(repo.getMapOfMoviesWithExtendedInfo()
+        List<MovieSortDTO> list = new java.util.ArrayList<>(repo.getMapOfMoviesExtendedForSearch()
                 .values()
                 .stream()
                 .map(movie -> new MovieSortDTO(
@@ -117,7 +117,6 @@ public class MovieService {
     }
 
     public List<MovieSortDTO> getAllMovies(String url, int entries, int limit) {
-        repo.setMapOfMoviesWithExtendedInfo(new HashMap<>());
 
         int currentAmountofEntries = 0;
         if(entries<limit){
@@ -192,6 +191,15 @@ public class MovieService {
         response
                 .results()
                 .forEach(movie -> repo.getMapOfMoviesWithExtendedInfo().put(movie.id(), movie));
+        currentUrl = baseUrl + response.next();
+        return currentUrl;
+    }
+
+    public String moviePutInListSearch(String baseUrl, String currentUrl){
+        MovieExtendedInfoDBResponse response = movieExtendedInfoDbGETResponse(currentUrl);
+        response
+                .results()
+                .forEach(movie -> repo.getMapOfMoviesExtendedForSearch().put(movie.id(), movie));
         currentUrl = baseUrl + response.next();
         return currentUrl;
     }
