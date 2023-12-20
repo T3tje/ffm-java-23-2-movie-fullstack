@@ -74,7 +74,7 @@ public class MovieService {
                         ).aggregateRating(),
                         movie.releaseYear().year(),
                         movie.primaryImage().orElse(new Image(
-                                " ",0,0,"none",new Caption("none"))).url()
+                                " ",0,0,"",new Caption(""))).url()
                 ))
                 .toList());
         sortingMovieSortDTOList(list);
@@ -112,7 +112,7 @@ public class MovieService {
                         ).aggregateRating(),
                         movieExtendedInfo.releaseYear().year(),
                         movieExtendedInfo.primaryImage().orElse(new Image(
-                                " ",0,0,"none",new Caption("none"))).url()))   //Turn each Movie into MovieSortDTO.
+                                " ",0,0,"",new Caption(""))).url()))   //Turn each Movie into MovieSortDTO.
                 .toList(); //Turn the Stream back to a List.
     }
 
@@ -167,7 +167,7 @@ public class MovieService {
                         ).aggregateRating(),
                         movie.releaseYear().year(),
                         movie.primaryImage().orElse(new Image(
-                                " ",0,0,"none",new Caption("none"))).url()
+                                " ",0,0,"",new Caption(""))).url()
                 ))
                 .toList());
         sortingMovieSortDTOList(list);
