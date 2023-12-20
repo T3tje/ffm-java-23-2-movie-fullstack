@@ -50,15 +50,18 @@ export default function List(props: ListProps) {
     return(
         <>
             <div>
-                <form onSubmit={searchForFilm}>
-                    <input
-                        type="text"
-                        placeholder="Film suchen"
-                        onChange={handleInput}
-                        value={input}
-                    />
-                    <button>suchen</button>
-                </form>
+                {props.title !== "Favorites" ?
+                    <form onSubmit={searchForFilm}>
+                <input
+                    type="text"
+                    placeholder="Film suchen"
+                    onChange={handleInput}
+                    value={input}
+                />
+                <button>suchen</button>
+            </form>: <h1></h1>
+                    }
+
             </div>
             <div id="movie-list">
                 <ul>
