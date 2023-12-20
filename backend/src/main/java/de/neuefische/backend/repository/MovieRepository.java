@@ -22,6 +22,7 @@ public class MovieRepository {
 
     private  Map<String, Movie> mapOfMovies = new HashMap<>();
     private  Map<String, MovieExtendedInfo> mapOfMoviesWithExtendedInfo = new HashMap<>();
+    private  Map<String, MovieExtendedInfo> mapOfMoviesExtendedForSearch = new HashMap<>();
 
 
 
