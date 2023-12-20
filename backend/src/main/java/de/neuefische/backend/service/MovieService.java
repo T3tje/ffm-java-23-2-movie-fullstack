@@ -63,7 +63,7 @@ public class MovieService {
             }
         }
 
-        List<MovieSortDTO> list = new java.util.ArrayList<>(repo.getMapOfMoviesWithExtendedInfo()
+        List<MovieSortDTO> list = new java.util.ArrayList<>(repo.getMapOfMoviesExtendedForSearch()
                 .values()
                 .stream()
                 .map(movie -> new MovieSortDTO(
