@@ -62,12 +62,14 @@ const MovieItem:React.FC<MovieItemProps> = (props: MovieItemProps) => {
             {props.movie.title}
             <span
                 className="herz"
-                onClick={handleClickFav}
-                style={{ color: isFavorite ? "#d2b593" : "initial" }}
+                onClick={(e) => {
+                    e.stopPropagation(); // Verhindert, dass das Klick-Ereignis weitergeleitet wird
+                    handleClickFav();
+                }}
+                style={{ color: isFavorite ? "#D2B593" : "initial" }}
             >
-        ♥
-      </span>
-
+            ♥
+        </span>
         </li>
     );
 };

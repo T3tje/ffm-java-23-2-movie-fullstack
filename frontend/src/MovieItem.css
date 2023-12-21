@@ -16,12 +16,10 @@
 }
 
 .herz {
+
     font-size: 30px;
     position: relative;
     top: 3.5px;
     margin-left: 4px;
 }
 
-.herz.hover {
-    transform: scale(1.1);
-}
