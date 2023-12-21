@@ -4,19 +4,32 @@ import "./List.css";
 import Movie from "./MoviesType.ts";
 import MovieItem from "./MovieItem.tsx";
 import MoviePopup from "./MoviePopup.tsx";
-import { Dispatch, SetStateAction } from "react";
+
+import {Dispatch, SetStateAction, useEffect, useState} from "react";
 import axios from "axios";
 
 type ListProps = {
-    movies: Movie[];
-    setMovies: Dispatch<SetStateAction<Movie[]>>;
+    itemsForList: Movie[];
+    setMovies?: Dispatch<SetStateAction<Movie[]>>;
     increaseListLengthBy10: () => void;
+    setFavorites?: Dispatch<SetStateAction<Movie[]>>;
+    title: string;
+    favorites: Movie[];
+    getAllFavorites: () => Promise<void>; // Hier wird die Funktion definiert
 };
+
+
+export default function List(props: ListProps) {
+
 
 const List: React.FC<ListProps> = ({ movies, setMovies, increaseListLengthBy10 }) => {
     const [input, setInput] = useState("");
     const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
     const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+    useEffect(() => {
+        props.getAllFavorites(); // Hier wird die Funktion aufgerufen
+    }, [props.favorites]);
 
     const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
         setInput(event.target.value);
@@ -27,8 +40,11 @@ const List: React.FC<ListProps> = ({ movies, setMovies, increaseListLengthBy10 }
         try {
             const response = await axios.get(`/api/search/${input}`);
             const { data } = response;
-            if (data.length > 0) {
-                setMovies(data);
+
+
+            if (data.length > 0 && props.setMovies) {
+                props.setMovies(data);
+
             } else {
                 console.log("Keine Filme gefunden");
             }
@@ -46,24 +62,39 @@ const List: React.FC<ListProps> = ({ movies, setMovies, increaseListLengthBy10 }
         setIsPopupOpen(false);
     };
 
-    return (
+
+    return(
         <>
             <div>
-                <form onSubmit={searchForFilm}>
-                    <input
-                        type="text"
-                        placeholder="Film suchen"
-                        value={input}
-                        onChange={handleInput}
-                    />
-                    <button type="submit">suchen</button>
-                </form>
+                {props.title !== "Favorites" ?
+                    <form onSubmit={searchForFilm}>
+                <input
+                    type="text"
+                    placeholder="Film suchen"
+                    onChange={handleInput}
+                    value={input}
+                />
+                <button>suchen</button>
+            </form>: <h1></h1>
+                    }
+
             </div>
             <div id="movie-list">
                 <ul>
-                    {movies.map(movie => (
-                        <MovieItem key={movie.id} movie={movie} onSelect={handleSelectMovie} />
-                    ))}
+                    <h2 id="listTitle">{props.title}</h2>
+                    {
+                        props.itemsForList.map(movie => {
+                            return (
+                            <MovieItem
+                                key={movie.id}
+                                movie={movie}
+                                favorites={props.favorites}
+                                setFavorites={props.setFavorites}
+                            />
+                            )
+                        })
+                    }
+
                 </ul>
             </div>
             <button id="mehrButton" onClick={increaseListLengthBy10}>mehr</button>

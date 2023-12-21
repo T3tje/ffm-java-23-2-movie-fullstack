@@ -5,12 +5,14 @@ import de.neuefische.backend.model.*;
 import de.neuefische.backend.repository.MovieRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -203,4 +205,21 @@ public class MovieService {
         currentUrl = baseUrl + response.next();
         return currentUrl;
     }
+
+    public List<MovieDTO> getFavorites() {
+        List<MovieDTO> movies = repo.getMovieMongoRepository().findAll();
+
+        return movies.stream()
+                .map(movie -> new MovieDTO(movie.id(), movie.title()))
+                .collect(Collectors.toList());
+    }
+
+    public MovieDTO addMovie(MovieDTO movie){
+        return repo.getMovieMongoRepository().save(new MovieDTO(movie.id(), movie.title()));
+    }
+
+    public void removeMovie(String id) {
+        repo.getMovieMongoRepository().deleteById(id);
+    }
+
 }

@@ -50,7 +50,12 @@ input::placeholder {
     bottom: 10px;
 }
 
-/* Hinzugefügte Styles für das Popup */
+
+#listTitle {
+    color: white;
+    margin: 0px 10px 12px 10px;
+}
+
 .popup {
     position: fixed;
     top: 0;

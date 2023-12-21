@@ -1,15 +1,27 @@
 .movie-item {
     background-color: #ffffff;
     color: #3d3d3d;
-    padding: 0.5em;
     margin: 0.5em;
     border-radius: 8px;
     border: solid 4px #3d3d3d;
     cursor: pointer;
     transition: border-color 0.25s;
     list-style: none;
+    height: 40px;
+    line-height: 29px;
 }
 
 .movie-item:hover {
     border-color: #d2b593;
+}
+
+.herz {
+    font-size: 30px;
+    position: relative;
+    top: 3.5px;
+    margin-left: 4px;
+}
+
+.herz.hover {
+    transform: scale(1.1);
 }
