@@ -45,9 +45,8 @@ public class MovieController {
     }
 
     @DeleteMapping("/deletefavorit/{id}")
-    public ResponseEntity<Void> removeMovie(@PathVariable String id) {
+    public void removeMovie(@PathVariable String id) {
         service.removeMovie(id);
-        return ResponseEntity.noContent().build();
     }
 
 }

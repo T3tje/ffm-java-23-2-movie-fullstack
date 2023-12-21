@@ -1,10 +1,8 @@
 // List.tsx
-import React, { useState } from "react";
 import "./List.css";
 import Movie from "./MoviesType.ts";
 import MovieItem from "./MovieItem.tsx";
 import MoviePopup from "./MoviePopup.tsx";
-
 import {Dispatch, SetStateAction, useEffect, useState} from "react";
 import axios from "axios";
 
@@ -22,7 +20,7 @@ type ListProps = {
 export default function List(props: ListProps) {
 
 
-const List: React.FC<ListProps> = ({ movies, setMovies, increaseListLengthBy10 }) => {
+//const List: React.FC<ListProps> = ({ movies, setMovies, increaseListLengthBy10 }) => {
     const [input, setInput] = useState("");
     const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
     const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -90,6 +88,7 @@ const List: React.FC<ListProps> = ({ movies, setMovies, increaseListLengthBy10 }
                                 movie={movie}
                                 favorites={props.favorites}
                                 setFavorites={props.setFavorites}
+                                onSelect={handleSelectMovie}
                             />
                             )
                         })
@@ -97,13 +96,13 @@ const List: React.FC<ListProps> = ({ movies, setMovies, increaseListLengthBy10 }
 
                 </ul>
             </div>
-            <button id="mehrButton" onClick={increaseListLengthBy10}>mehr</button>
+            <button id="mehrButton" onClick={props.increaseListLengthBy10}>mehr</button>
 
             {isPopupOpen && selectedMovie && (
                 <MoviePopup movie={selectedMovie} onClose={handleClosePopup} />
             )}
         </>
     );
-};
+}
 
-export default List;
+
