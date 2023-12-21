@@ -1,16 +1,19 @@
+
 import { useState } from "react";
+import React from 'react';
 import Movie from "./MoviesType.ts";
 import "./MovieItem.css";
 import axios from "axios";
 import { Dispatch, SetStateAction } from "react";
 
 type MovieItemProps = {
-    movie: Movie;
+    movie: Movie,
+    onSelect: (movie: Movie) => void; // Hinzugefügt
     favorites: Movie[];
     setFavorites: Dispatch<SetStateAction<Movie[]>> | undefined;
 };
 
-const MovieItem = (props: MovieItemProps) => {
+const MovieItem:React.FC<MovieItemProps> = (props: MovieItemProps) => {
     const [isFavorite, setIsFavorite] = useState(
         props.favorites.some((favorite) => favorite.id === props.movie.id)
     );
@@ -42,26 +45,32 @@ const MovieItem = (props: MovieItemProps) => {
         }
     };
 
-    const handleClick = () => {
+    const handleClickFav = () => {
         if (isFavorite) {
             removeMovie(props.movie);
         } else {
             addMovie(props.movie);
         }
     };
+      
+      const handleClick = () => {
+        props.onSelect(props.movie);
+    }
 
     return (
-        <li className={"movie-item"}>
+        <li className={"movie-item"} onClick={handleClick}>
             {props.movie.title}
             <span
                 className="herz"
-                onClick={handleClick}
+                onClick={handleClickFav}
                 style={{ color: isFavorite ? "#d2b593" : "initial" }}
             >
         ♥
       </span>
+
         </li>
     );
 };
 
 export default MovieItem;
+

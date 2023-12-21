@@ -1,6 +1,10 @@
-import "./List.css"
+// List.tsx
+import React, { useState } from "react";
+import "./List.css";
 import Movie from "./MoviesType.ts";
 import MovieItem from "./MovieItem.tsx";
+import MoviePopup from "./MoviePopup.tsx";
+
 import {Dispatch, SetStateAction, useEffect, useState} from "react";
 import axios from "axios";
 
@@ -17,7 +21,11 @@ type ListProps = {
 
 export default function List(props: ListProps) {
 
-    const [input, setInput] = useState("")
+
+const List: React.FC<ListProps> = ({ movies, setMovies, increaseListLengthBy10 }) => {
+    const [input, setInput] = useState("");
+    const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
 
     useEffect(() => {
         props.getAllFavorites(); // Hier wird die Funktion aufgerufen
@@ -25,26 +33,34 @@ export default function List(props: ListProps) {
 
     const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
         setInput(event.target.value);
-    }
+    };
+
     const searchForFilm = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault()
+        event.preventDefault();
         try {
             const response = await axios.get(`/api/search/${input}`);
             const { data } = response;
 
+
             if (data.length > 0 && props.setMovies) {
                 props.setMovies(data);
+
             } else {
                 console.log("Keine Filme gefunden");
             }
-            return
         } catch (error) {
             console.error("Fehler beim Abrufen der Filmliste:", error);
-            return
         }
     };
 
+    const handleSelectMovie = (movie: Movie) => {
+        setSelectedMovie(movie);
+        setIsPopupOpen(true);
+    };
 
+    const handleClosePopup = () => {
+        setIsPopupOpen(false);
+    };
 
 
     return(
@@ -78,9 +94,16 @@ export default function List(props: ListProps) {
                             )
                         })
                     }
+
                 </ul>
             </div>
-            <button id="mehrButton" onClick={props.increaseListLengthBy10}>mehr</button>
+            <button id="mehrButton" onClick={increaseListLengthBy10}>mehr</button>
+
+            {isPopupOpen && selectedMovie && (
+                <MoviePopup movie={selectedMovie} onClose={handleClosePopup} />
+            )}
         </>
-    )
-}
+    );
+};
+
+export default List;

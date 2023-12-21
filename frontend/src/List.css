@@ -1,3 +1,4 @@
+/* Vorhandene Styles */
 #movie-list {
     list-style: none;
     padding: 20px;
@@ -38,7 +39,6 @@ input:hover {
 input:focus {
     outline: none;
     border-color: #d2b593;
-    font-size: 16px;
 }
 
 input::placeholder {
@@ -50,8 +50,44 @@ input::placeholder {
     bottom: 10px;
 }
 
+
 #listTitle {
     color: white;
     margin: 0px 10px 12px 10px;
 }
 
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-inner {
+    background-color: #3d3d3d;
+    padding: 20px;
+    border-radius: 5px;
+    position: relative;
+    /* Sie können hier eine Maximalbreite festlegen, um zu verhindern, dass das Popup zu groß wird */
+    max-width: 80%;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.25); /* Optional: Schatten für das Popup für besseres Aussehen */
+}
+
+.close-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    border-radius: 8px;
+    padding: 0.2em 0.6em;
+    border: 4px solid #ffffff;
+    font-size: 1.0rem;
+    background-color: #d2b593;
+    cursor: pointer;
+    transition: transform 0.25s;
+    color: #ffffff;
+}

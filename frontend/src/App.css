@@ -45,6 +45,10 @@ h1 {
   font-size: 3.2em;
   line-height: 1.1;
 }
+h2 {
+  font-size: 2.2em;
+  line-height: 1.1;
+}
 
 button {
   border-radius: 8px;
@@ -78,4 +82,12 @@ button:focus-visible {
   button {
     background-color: #d2b593;
   }
+}
+/* Hinzugefügte Styles für das Bild im Popup */
+.popup-inner img {
+  max-width: 100%; /* Bild nimmt maximal 100% der Breite des .popup-inner Elements ein */
+  max-height: 400px; /* Maximale Bildhöhe */
+  object-fit: contain; /* Behält die Proportionen des Bildes bei und füllt die gegebenen Maße aus */
+  border-radius: 10px; /* Optional: Gibt dem Bild abgerundete Ecken */
+  margin-top: 20px; /* Abstand nach oben */
 }
