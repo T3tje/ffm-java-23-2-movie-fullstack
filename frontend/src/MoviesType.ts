@@ -1,7 +1,7 @@
 type Movie = {
     title:string,
     id: string,
-    year: number,
+    releaseYear: number,
     url: string
 }
 
