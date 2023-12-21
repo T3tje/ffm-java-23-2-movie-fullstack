@@ -5,11 +5,11 @@ import de.neuefische.backend.model.*;
 import de.neuefische.backend.repository.MovieRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.mongodb.repository.MongoRepository;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import java.util.HashMap;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -26,7 +26,6 @@ public class MovieService {
 
 
     public List<MovieSortDTO> findMoviesByTitle(String title,  int entries, int limit) {
-        repo.setMapOfMoviesExtendedForSearch(new HashMap<String,MovieExtendedInfo>());
 
         int currentAmountofEntries = 0;
         if(entries<limit){
@@ -122,7 +121,7 @@ public class MovieService {
 
         int currentAmountofEntries = 0;
         if(entries<limit){
-            MovieExtendedInfoDBResponse response = movieExtendedInfoDbGETResponse(url + "/titles?limit=" + entries +"&info=base_info");
+            MovieExtendedInfoDBResponse response = movieExtendedInfoDbGETResponse(url + "/titles?limit=" + entries +"&startYear=2000&info=base_info");
             response.results().
                     forEach(movieExtendedInfo -> repo.getMapOfMoviesWithExtendedInfo().put(
                     movieExtendedInfo.id(),
@@ -140,7 +139,7 @@ public class MovieService {
 
             if(currentAmountofEntries == 0){
 
-                currentUrl = moviePutInList(baseUrl,baseUrl + "/titles?limit=" + limit +"&info=base_info");
+                currentUrl = moviePutInList(baseUrl,url + "/titles?limit=" + entries +"&startYear=2000&endYear=2005&info=base_info");
                 currentAmountofEntries += limit;
 
             }
